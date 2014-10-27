@@ -24,9 +24,7 @@ public class testGoogleDrive
 {
   public static void main (String[] args) {
     //test Google Drive
-   CloudAPI cloudAPI = new CloudAPI (SERVICE_TYPE.GOOGLE_DRIVE);
-   cloudAPI.setClientID ("YOUR ID");
-   cloudAPI.setClientSecret ("YOUR SECRET");
+   GoogleDriveAPI cloudAPI = new GoogleDriveAPI ("google_drive_setting.dat");   
    
    try {
      String authorizeUrl = cloudAPI.requestAccessKey ();
@@ -35,8 +33,8 @@ public class testGoogleDrive
         System.out.println("3. Copy the authorization code.");
         String code = new BufferedReader(new InputStreamReader(System.in)).readLine().trim();
      cloudAPI.login (code);
-     //String fileID = cloudAPI.uploadFile ("dummy.txt","TEST MY API","Nothing to describe", "plain/text");
-     //cloudAPI.downloadFile (fileID,"this is the dummy file I download from Google Drive.txt");
+     String fileID = cloudAPI.uploadFile ("dummy.txt","TEST MY API","Nothing to describe", "plain/text");
+     cloudAPI.downloadFile (fileID,"this is the dummy file I download from Google Drive.txt");
      List<GenericFileFormat> listFile = cloudAPI.getStorageInformation ("");
      for (GenericFileFormat file : listFile) {
        System.out.println ("File name: " + file.getFileName ());

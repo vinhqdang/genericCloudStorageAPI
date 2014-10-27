@@ -25,9 +25,7 @@ public class testDropbox
 {
  public static void main (String[] args) {
    //test Dropbox
-   CloudAPI cloudAPI = new CloudAPI (SERVICE_TYPE.DROPBOX);
-   cloudAPI.setAppKey ("APP_KEY");
-   cloudAPI.setAppSecret ("APP_SECRET");
+   DropboxAPI cloudAPI = new DropboxAPI ("dropbox_setting.dat");
    
    try {
      String authorizeUrl = cloudAPI.requestAccessKey ();
@@ -36,9 +34,9 @@ public class testDropbox
         System.out.println("3. Copy the authorization code.");
         String code = new BufferedReader(new InputStreamReader(System.in)).readLine().trim();
      cloudAPI.login (code);
-     //cloudAPI.uploadFile ("dummy.txt","/dummy.txt","Nothing to describe", "plain/text");
-     //cloudAPI.downloadFile ("/dummy.txt","this is the dummy file I download from Dropbox.txt");
-     List<GenericFileFormat> listFile = cloudAPI.getStorageInformation ("/Photos");
+     cloudAPI.uploadFile ("dummy.txt","/dummy.txt","Nothing to describe", "plain/text");
+     cloudAPI.downloadFile ("/dummy.txt","this is the dummy file I download from Dropbox.txt");
+     List<GenericFileFormat> listFile = cloudAPI.getStorageInformation ("/");
      for (GenericFileFormat file : listFile) {
        System.out.println ("File name: " + file.getFileName ());
        System.out.println ("Details: " + file.getDescription ());

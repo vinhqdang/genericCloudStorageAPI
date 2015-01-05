@@ -47,7 +47,8 @@ public abstract class CloudAPI{
 	//for both services
 	protected String APP_KEY; // CLIENT_ID in Google Drive case
 	protected String APP_SECRET; // CLIENT_SECRET in Google Drive case
-	protected String ACCESS_TOKEN;
+	protected String ACCESS_TOKEN;	//for both
+	protected String REFRESH_TOKEN;	//for Google Drive only
 
 	//for Dropbox
 	protected DbxAppInfo dBappInfo;
@@ -64,9 +65,9 @@ public abstract class CloudAPI{
 	protected GoogleAuthorizationCodeFlow gDflow;
 	protected HttpTransport gDhttpTransport;
 	protected JsonFactory gDjsonFactory;
+	private BufferedReader reader;
 
 	protected void readSetting (String settingFile) {
-		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(settingFile));
 			String line = null;

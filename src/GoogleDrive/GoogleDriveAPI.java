@@ -25,105 +25,124 @@ import com.google.api.services.drive.model.FileList;
 
 public class GoogleDriveAPI extends CloudAPI 
 {
-  public GoogleDriveAPI (String settingFile) {
-    this.readSetting (settingFile);
-  }
-  
-  public  String requestAccessKey () throws IOException, DbxException {
-    gDhttpTransport = new NetHttpTransport();
-    gDjsonFactory = new JacksonFactory();
-      
-    gDflow = new GoogleAuthorizationCodeFlow.Builder(
-     gDhttpTransport, gDjsonFactory, APP_KEY, APP_SECRET, Arrays.asList(DriveScopes.DRIVE))
-     .setAccessType("online")
-     .setApprovalPrompt("auto").build();
-    
-    return gDflow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build();
-  }
-  public void login (String accessKey) throws IOException, DbxException {
-    GoogleTokenResponse response = gDflow.newTokenRequest(accessKey).setRedirectUri(REDIRECT_URI).execute();
-    GoogleCredential credential = new GoogleCredential().setFromTokenResponse(response);
-    
-    //Create a new authorized API client
-    gDservice = new Drive.Builder(gDhttpTransport, gDjsonFactory, credential).build();
-  }
-  public String uploadFile (String filePath, String title, String description, String mimeType) throws IOException, DbxException {
-    File file = new File ();
-    file.setTitle (title);
-    file.setDescription (description);
-    file.setMimeType (mimeType);
-    java.io.File fileContent = new java.io.File(filePath);
-    FileContent mediaContent = new FileContent(mimeType, fileContent);
-    File uploadFile = gDservice.files().insert(file, mediaContent).execute();
-    return uploadFile.getId ();
-  }
-  
-  public boolean downloadFile (String filePath,String outputFileName) throws IOException, DbxException {
-    File file = null;
-     try {
-      file = gDservice.files().get(filePath).execute();
+	public GoogleDriveAPI (String settingFile) {
+		this.readSetting (settingFile);
+	}
 
-      //System.out.println("Title: " + file.getTitle());
-      //System.out.println("Description: " + file.getDescription());
-      //System.out.println("MIME type: " + file.getMimeType());
-    } catch (IOException e) {
-      System.out.println("An error occured: " + e);
-    }
-    //download file
-    if (file.getDownloadUrl() != null && file.getDownloadUrl().length() > 0) {
-      try {
-        HttpResponse resp =
-            gDservice.getRequestFactory().buildGetRequest(new GenericUrl(file.getDownloadUrl()))
-                .execute();
-        FileOutputStream outputStream = new FileOutputStream(outputFileName);
- 
-        int read = 0;
-        byte[] bytes = new byte[1024];
-        
-        while ((read = resp.getContent().read(bytes)) != -1) {
-          outputStream.write(bytes, 0, read);
-        }
-      } catch (IOException e) {
-        // An error occurred.
-        e.printStackTrace();
-        return false;
-      } 
-    } else {
-      // The file doesn't have any content stored on Drive.
-      return false;
-    }
-    return true;
-  }
-  public List<GenericFileFormat> getStorageInformation (String path) {
-    List<GenericFileFormat> res = new ArrayList<GenericFileFormat>();
-    Files.List request = null;
-       List<File> result = null;
-       try {
-       result = new ArrayList<File>();
-       request = gDservice.files().list();
-     } catch (IOException e) {
-       e.printStackTrace ();
-     }
-       
-       do {
-         try {
-           FileList files = request.execute();
-           
-           result.addAll(files.getItems());
-           request.setPageToken(files.getNextPageToken());
-         } catch (IOException e) {
-           System.out.println("An error occurred: " + e);
-           request.setPageToken(null);
-         }
-       } while (request.getPageToken() != null &&
-                request.getPageToken().length() > 0);
-     for (File file : result) {
-       GenericFileFormat genericFile = new GenericFileFormat ();
-       genericFile.setFileName (file.getTitle ());
-       genericFile.setLastModifiedTime (file.getModifiedDate());
-       genericFile.setMd5Checksum (file.getMd5Checksum());
-       res.add (genericFile);
-     }
-       return res;
-  }
+	public  String requestAccessKey () throws IOException, DbxException {
+		gDhttpTransport = new NetHttpTransport();
+		gDjsonFactory = new JacksonFactory();
+
+		gDflow = new GoogleAuthorizationCodeFlow.Builder(
+				gDhttpTransport, gDjsonFactory, APP_KEY, APP_SECRET, Arrays.asList(DriveScopes.DRIVE))
+		.setAccessType("offline")
+		.setApprovalPrompt("auto").build();
+
+		return gDflow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build();
+	}
+	public void login (String accessKey) throws IOException, DbxException {
+		GoogleTokenResponse response = gDflow.newTokenRequest(accessKey).setRedirectUri(REDIRECT_URI).execute();
+		//GoogleCredential credential = new GoogleCredential().setFromTokenResponse(response);
+		
+		GoogleCredential credential = new GoogleCredential.Builder().setTransport(gDhttpTransport)
+		        .setJsonFactory(gDjsonFactory)
+		        .setClientSecrets(APP_KEY, APP_SECRET)
+		        .build()
+		        .setFromTokenResponse(response);
+		
+		ACCESS_TOKEN = credential.getAccessToken();
+		REFRESH_TOKEN = credential.getRefreshToken();
+
+		//Create a new authorized API client
+		gDservice = new Drive.Builder(gDhttpTransport, gDjsonFactory, credential).build();
+	}
+	
+	//login without asking the authorization code from user again
+	public void login () throws IOException {
+		GoogleCredential credential1 = new GoogleCredential.Builder().setJsonFactory(gDjsonFactory)
+				.setTransport(gDhttpTransport).setClientSecrets(APP_KEY, APP_SECRET).build();
+				credential1.setAccessToken(ACCESS_TOKEN);
+				credential1.setRefreshToken(REDIRECT_URI);
+				gDservice = new Drive.Builder(gDhttpTransport, gDjsonFactory, credential1).build();
+	}
+	
+	public String uploadFile (String filePath, String title, String description, String mimeType) throws IOException, DbxException {
+		File file = new File ();
+		file.setTitle (title);
+		file.setDescription (description);
+		file.setMimeType (mimeType);
+		java.io.File fileContent = new java.io.File(filePath);
+		FileContent mediaContent = new FileContent(mimeType, fileContent);
+		File uploadFile = gDservice.files().insert(file, mediaContent).execute();
+		return uploadFile.getId ();
+	}
+
+	public boolean downloadFile (String filePath,String outputFileName) throws IOException, DbxException {
+		File file = null;
+		try {
+			file = gDservice.files().get(filePath).execute();
+
+			//System.out.println("Title: " + file.getTitle());
+			//System.out.println("Description: " + file.getDescription());
+			//System.out.println("MIME type: " + file.getMimeType());
+		} catch (IOException e) {
+			System.out.println("An error occured: " + e);
+		}
+		//download file
+		if (file.getDownloadUrl() != null && file.getDownloadUrl().length() > 0) {
+			try {
+				HttpResponse resp =
+						gDservice.getRequestFactory().buildGetRequest(new GenericUrl(file.getDownloadUrl()))
+						.execute();
+				FileOutputStream outputStream = new FileOutputStream(outputFileName);
+
+				int read = 0;
+				byte[] bytes = new byte[1024];
+
+				while ((read = resp.getContent().read(bytes)) != -1) {
+					outputStream.write(bytes, 0, read);
+				}
+			} catch (IOException e) {
+				// An error occurred.
+				e.printStackTrace();
+				return false;
+			} 
+		} else {
+			// The file doesn't have any content stored on Drive.
+			return false;
+		}
+		return true;
+	}
+	public List<GenericFileFormat> getStorageInformation (String path) {
+		List<GenericFileFormat> res = new ArrayList<GenericFileFormat>();
+		Files.List request = null;
+		List<File> result = null;
+		try {
+			result = new ArrayList<File>();
+			request = gDservice.files().list();
+		} catch (IOException e) {
+			e.printStackTrace ();
+		}
+
+		do {
+			try {
+				FileList files = request.execute();
+
+				result.addAll(files.getItems());
+				request.setPageToken(files.getNextPageToken());
+			} catch (IOException e) {
+				System.out.println("An error occurred: " + e);
+				request.setPageToken(null);
+			}
+		} while (request.getPageToken() != null &&
+				request.getPageToken().length() > 0);
+		for (File file : result) {
+			GenericFileFormat genericFile = new GenericFileFormat ();
+			genericFile.setFileName (file.getTitle ());
+			genericFile.setLastModifiedTime (file.getModifiedDate());
+			genericFile.setMd5Checksum (file.getMd5Checksum());
+			res.add (genericFile);
+		}
+		return res;
+	}
 }

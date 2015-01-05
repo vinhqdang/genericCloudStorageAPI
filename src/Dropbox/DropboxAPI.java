@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.dropbox.core.DbxAppInfo;
-import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxClient;
 import com.dropbox.core.DbxEntry;
 import com.dropbox.core.DbxException;
@@ -36,7 +35,7 @@ public class DropboxAPI extends CloudAPI
 	public void login (String accessKey) throws IOException, DbxException {
 		//DbxAuthFinish authFinish = dBwebAuth.finish(accessKey);
 		//String accessToken = authFinish.accessToken;
-		dBclient = new DbxClient(dBconfig, "cS4Yoa7-2QIAAAAAAAAM3N1aaxYt3B866zb41HmyeNwXP9bpBZCM3OmutFOICfRD");
+		dBclient = new DbxClient(dBconfig, ACCESS_TOKEN);
 	}
 	public String uploadFile (String filePath, String title, String description, String mimeType) throws IOException, DbxException {
 		java.io.File inputFile = new java.io.File(filePath);

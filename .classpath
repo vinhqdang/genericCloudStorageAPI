@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="src/|libs/" kind="src" path=""/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/qdang/workspace/genericCloudStorageAPI/libs/dropbox/dropbox-core-sdk-1.7.7.jar"/>
+	<classpathentry kind="lib" path="/Users/qdang/workspace/genericCloudStorageAPI/libs/dropbox/jackson-core-2.2.4.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-api-client-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-api-client-android-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-api-client-appengine-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-api-client-gson-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-api-client-jackson2-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-api-client-java6-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-api-client-servlet-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-api-services-drive-v2-rev150-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-http-client-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-http-client-android-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-http-client-appengine-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-http-client-gson-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-http-client-jackson2-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-http-client-jdo-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-oauth-client-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-oauth-client-appengine-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-oauth-client-java6-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-oauth-client-jetty-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/google-oauth-client-servlet-1.19.0.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/gson-2.1.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/httpclient-4.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/httpcore-4.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/jackson-core-2.1.3.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/jdo2-api-2.3-eb.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/jetty-6.1.26.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/jetty-util-6.1.26.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/jsr305-1.3.9.jar"/>
+	<classpathentry kind="lib" path="libs/google_drive/transaction-api-1.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

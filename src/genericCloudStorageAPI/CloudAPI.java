@@ -75,6 +75,7 @@ public abstract class CloudAPI{
 					String[] tokens = line.split ("=");
 					if (tokens[0].equals ("KEY")) APP_KEY = tokens[1];
 					if (tokens[0].equals ("SECRET")) APP_SECRET = tokens[1];
+					if (tokens[0].equals("TOKEN")) ACCESS_TOKEN = tokens[1];
 				}
 			} catch (IOException e) {
 				System.out.println ("Error while reading setting file");

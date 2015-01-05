@@ -20,6 +20,10 @@ You need to import all jar files in /libs directory
 3. After creating a new project, you can get APP_KEY and APP_SECRET value
 4. Compile and run testDropbox.java file
 
+### Update for Dropbox:
+
+For testing purpose, you can Generate Access Token and use this token to access your Dropbox account without following the standard flow of OAuth2
+
 ### For Google Drive:
 1. Register Google account
 2. Go to Google Developer Console: https://console.developers.google.com/project
@@ -28,3 +32,10 @@ You need to import all jar files in /libs directory
 5. On the left side, select Credentials, then under OAuth click to "Create New Client ID". Follow the instruction on the screen. 
 6. Replacing the CLIENT_ID and CLIENT_SECRET by the keys Google provided.
 7. Compile and run testGoogleDrive.java
+
+### For both of services:
+You need to create setting file with following format:
+KEY=	//it is your CLIENT ID in case Google Drive
+SECRET=	//it is your CLIENT SECRET in case Google Drive
+TOKEN=	//it is access token you generated with Dropbox
+and fill your information
